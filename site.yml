@@ -1,0 +1,31 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: Install updates
+    package:
+      upgrade: dist
+      update_cache: yes
+
+- hosts: web_servers
+  become: true
+  tasks:
+
+  - name: Install Apache2 and PHP packages
+    package:
+      name:
+        - apache2
+        - libapache2-mod-php
+      state: latest
+
+- hosts: db_servers
+  become: true
+  tasks:
+
+  - name: Install MariaDB package
+    package:
+      name:
+        - mariadb-server
+      state: latest
