@@ -4,10 +4,10 @@
   become: true
   tasks:
 
-  - name: Update Repository cache
-    apt:
+  - name: Install Apache2 and PHP packages
+    package:
       update_cache: true
-
-  - name: Install Apache2 package
-    apt:
-      name: apache2
+      name:
+        - apache2
+        - libapache2-mod-php
+      state: latest
