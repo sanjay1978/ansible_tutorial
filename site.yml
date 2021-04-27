@@ -10,6 +10,32 @@
       upgrade: dist
       update_cache: yes
 
+- hosts: all
+  become: true
+  tasks:
+
+  - name: Add user sanjay
+    tags: always
+    user:
+      name: sanjay
+      groups: root
+
+  - name: Add ssh key for sanjay
+    tags: always
+    authorized_key:
+      user: sanjay
+      key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwNu1mgL0PSoCKoE9DlAHlInzbjkYHHPt+EzWKMbF3NRv2AU+/IWIiu5PGTUFv5FcEp7oIJZE/N9gwLjNIAjb/AlIJnM3REdOeTXBT+/BD/h4s9BbERS9dkbEU2g7A19U78BD2xzcQJHqMAw12Hb4zAx/oJaSVd6cEmWJeNBvA+5LFVD7aTtRwhTw4xssRaxMmB9I7QlQIFpCH2NQKIagpvVd+r6U2hoshIuk381v2arM1cRpAXcKWEHTMIpAyZ8PxVIvyT2+mqc8zLyJxVs8F07ZXtA5/J1Ol/lefp1M4oRgejuK5VJqme9Wfb+3/fvngp9b5KK3UK/dHyWoe6jg1 ubuntu@localhost"
+
+  - name: Add sudoers for sanjay
+    tags: always
+    copy:
+      src: sudoer_sanjay
+      dest: /etc/sudoers.d/sanjay
+      owner: root
+      group: root
+      mode: 0440
+
+
 - hosts: web_servers
   become: true
   tasks:
@@ -21,6 +47,15 @@
         - apache2
         - libapache2-mod-php
       state: latest
+
+
+  - name: Start service
+    tags: apache,apache2,ubuntu
+    service:
+      name: apache2
+      state: started  
+
+
   - name: Copy Index.html file
     tags: apache, apache2,ubuntu
     copy:
