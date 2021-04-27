@@ -1,0 +1,6 @@
+- name: Install MariaDB package
+  tags: db,mariadb
+  package:
+    name:
+      - mariadb-server
+    state: latest
